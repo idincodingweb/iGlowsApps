@@ -21,18 +21,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _bootstrap() async {
     await Future.delayed(const Duration(milliseconds: 1800));
-    if (!mounted) return;
-
     final prefs = await SharedPreferences.getInstance();
     final seenOnboarding = prefs.getBool('seen_onboarding') ?? false;
     final user = FirebaseAuth.instance.currentUser;
 
+    if (!mounted) return;
+    final navigator = Navigator.of(context);
+
     if (!seenOnboarding) {
-      Navigator.of(context).pushReplacementNamed('/onboarding');
+      navigator.pushReplacementNamed('/onboarding');
     } else if (user == null) {
-      Navigator.of(context).pushReplacementNamed('/login');
+      navigator.pushReplacementNamed('/login');
     } else {
-      Navigator.of(context).pushReplacementNamed('/home');
+      navigator.pushReplacementNamed('/home');
     }
   }
 
@@ -59,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   borderRadius: BorderRadius.circular(36),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(.25),
+                      color: AppColors.primary.withValues(alpha: .25),
                       blurRadius: 30,
                       offset: const Offset(0, 12),
                     ),
